@@ -1,0 +1,24 @@
+[package]
+name = "scp-target"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "scp_target"
+path = "src/lib.rs"
+
+[[bin]]
+name = "scp-target"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+scp-core = { path = "../scp-core" }
+rand_core.workspace = true
+rand_chacha.workspace = true
+x25519-dalek.workspace = true

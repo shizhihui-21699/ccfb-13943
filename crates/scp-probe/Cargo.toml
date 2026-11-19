@@ -1,0 +1,23 @@
+[package]
+name = "scp-probe"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "scp-probe"
+path = "src/main.rs"
+
+[dev-dependencies]
+scp-target = { path = "../scp-target" }
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+scp-core = { path = "../scp-core" }
+rand_core.workspace = true
+rand_chacha.workspace = true
+x25519-dalek.workspace = true

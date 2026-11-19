@@ -1,0 +1,18 @@
+[package]
+name = "scp-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+hex.workspace = true
+chacha20poly1305.workspace = true
+hkdf.workspace = true
+hmac.workspace = true
+sha2.workspace = true
+subtle.workspace = true
+x25519-dalek.workspace = true
+rand_core.workspace = true
+rand_chacha.workspace = true

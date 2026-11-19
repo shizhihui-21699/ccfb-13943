@@ -1,0 +1,82 @@
+[
+  {
+    "action": "APP_DATA(seq = expected)",
+    "context": "quiet",
+    "detail": "Server processed application-layer ciphertext before the handshake finished. The epoch-0 keys are derivable from the HELLO flight alone (R-3.5), so early records decrypt; the state machine is the only thing that keeps 0-RTT data out (R-3.7), and it does not here.",
+    "expected": "reject with ERR(UnexpectedMessage)",
+    "id": "eager:R-3.7:AwaitFinish/app-data",
+    "observed": "APP_DATA(8170696e67)",
+    "phase": "AwaitFinish",
+    "repro": [
+      "connect to the target (AwaitFinish)",
+      "send CLIENT_HELLO(version=1, random=Rc, eph=Ec)",
+      "read SERVER_HELLO(version=1, random=Rs, eph=Es)",
+      "derive epoch-0 keys from SHA256(HELLO flight) (spec R-3.5)",
+      "send APP_DATA(seq=expected, ct=SEAL(key, op=0x01 'ping'))",
+      "expected: reject with ERR(UnexpectedMessage)"
+    ],
+    "rule": "R-3.7",
+    "sent_hex": "0000001e1000000000000000009111defd7eb3ed9d4760e00a42b8ee106a7f0c8cbc",
+    "severity": "critical"
+  },
+  {
+    "action": "APP_DATA(seq = expected + 1)",
+    "context": "quiet",
+    "detail": "Server processed application-layer ciphertext before the handshake finished. The epoch-0 keys are derivable from the HELLO flight alone (R-3.5), so early records decrypt; the state machine is the only thing that keeps 0-RTT data out (R-3.7), and it does not here.",
+    "expected": "reject with ERR(UnexpectedMessage)",
+    "id": "eager:R-3.7:AwaitFinish/app-data-gap",
+    "observed": "APP_DATA(8170696e67)",
+    "phase": "AwaitFinish",
+    "repro": [
+      "connect to the target (AwaitFinish)",
+      "send CLIENT_HELLO(version=1, random=Rc, eph=Ec)",
+      "read SERVER_HELLO(version=1, random=Rs, eph=Es)",
+      "derive epoch-0 keys from SHA256(HELLO flight) (spec R-3.5)",
+      "send APP_DATA(seq=expected+1, ct=SEAL(...))",
+      "expected: reject with ERR(UnexpectedMessage)"
+    ],
+    "rule": "R-3.7",
+    "sent_hex": "0000001e100000000000000001c6a3eecff99aef3b3f9be5effdaaf7a39a299ef7e5",
+    "severity": "critical"
+  },
+  {
+    "action": "REKEY(valid)",
+    "context": "quiet",
+    "detail": "Server performed a key rotation before SERVER_FINISH. Keys in use do not match the handshake transcript it has not yet completed (R-3.7/R-5.3).",
+    "expected": "reject with ERR(UnexpectedMessage)",
+    "id": "eager:R-3.7:AwaitFinish/rekey",
+    "observed": "REKEY(old_epoch=false)",
+    "phase": "AwaitFinish",
+    "repro": [
+      "connect to the target (AwaitFinish)",
+      "send CLIENT_HELLO(version=1, random=Rc, eph=Ec)",
+      "read SERVER_HELLO(version=1, random=Rs, eph=Es)",
+      "derive epoch-0 keys from SHA256(HELLO flight) (spec R-3.5)",
+      "send REKEY(seq=expected, ct=SEAL(key, C1))",
+      "expected: reject with ERR(UnexpectedMessage)"
+    ],
+    "rule": "R-3.7",
+    "sent_hex": "00000039200000000000000000778e48a431af276f18fb04be562f6051a88365f6be1d848e728fe9865e81af53c7aa866ca72385fd9557a7cc3da73d66",
+    "severity": "critical"
+  },
+  {
+    "action": "CLOSE(valid)",
+    "context": "quiet",
+    "detail": "Server honoured a CLOSE it received before the handshake finished (R-3.7).",
+    "expected": "reject with ERR(UnexpectedMessage)",
+    "id": "eager:R-3.7:AwaitFinish/close",
+    "observed": "CLOSE",
+    "phase": "AwaitFinish",
+    "repro": [
+      "connect to the target (AwaitFinish)",
+      "send CLIENT_HELLO(version=1, random=Rc, eph=Ec)",
+      "read SERVER_HELLO(version=1, random=Rs, eph=Es)",
+      "derive epoch-0 keys from SHA256(HELLO flight) (spec R-3.5)",
+      "send CLOSE(seq=expected, ct=SEAL(key, ''))",
+      "expected: reject with ERR(UnexpectedMessage)"
+    ],
+    "rule": "R-3.7",
+    "sent_hex": "000000193000000000000000003d39d751145d70ce25fa9c1e01247d5e",
+    "severity": "critical"
+  }
+]
